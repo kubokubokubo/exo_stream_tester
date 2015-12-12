@@ -1,7 +1,6 @@
 package net.kubokubo.exoplayer.streamtester;
 
 import android.app.Activity;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.SurfaceView;
@@ -31,8 +30,8 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        Uri streamUri = Uri.parse("http://dash.edgesuite.net/envivio/dashpr/clear/Manifest.mpd");
-        mPlayer.init(mSurfaceView, streamUri);
+        String streamUrl = "http://dash.edgesuite.net/envivio/dashpr/clear/Manifest.mpd";
+        mPlayer.init(mSurfaceView, streamUrl, null, this);
         mPlayer.play();
     }
 
