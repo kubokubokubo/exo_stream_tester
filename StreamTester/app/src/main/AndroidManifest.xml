@@ -2,13 +2,9 @@
     package="net.kubokubo.exoplayer.streamtester">
 
     <application
-        android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <activity
-            android:name="net.kubokubo.exoplayer.streamtester.MainActivity"
-            android:label="@string/app_name">
+            android:name="net.kubokubo.exoplayer.streamtester.MainActivity">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
