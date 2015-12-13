@@ -1,6 +1,7 @@
 package net.kubokubo.exoplayer.streamtester;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.SurfaceView;
@@ -14,13 +15,17 @@ import net.kubokubo.exoplayer.exowrapper.player.PlayerImpl;
 /**
  * Created by kubo on 11/12/15.
  */
-public class MainActivity extends Activity implements PlayerCallback {
+public class WidevinePlayerActivity extends Activity implements PlayerCallback {
 
-    private static final String TAG = "MainActivity";
+    private static final String TAG = "WidevinePlayerActivity";
+    public static final String CONTENT_LICENSE_URI = "content.widevine.license";
 
     private Player mPlayer;
     private SurfaceView mSurfaceView;
     private AspectRatioFrameLayout mVideoFrame;
+
+    private String mStreamUrl;
+    private String mLicenseUrl;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -35,8 +40,10 @@ public class MainActivity extends Activity implements PlayerCallback {
     @Override
     protected void onResume() {
         super.onResume();
-        String streamUrl = "http://dash.edgesuite.net/envivio/dashpr/clear/Manifest.mpd";
-        mPlayer.init(streamUrl);
+        Intent intent = getIntent();
+        mStreamUrl = intent.getData().toString();
+        mLicenseUrl = intent.getStringExtra(CONTENT_LICENSE_URI);
+        mPlayer.init(mStreamUrl, mLicenseUrl);
         mPlayer.play();
     }
 

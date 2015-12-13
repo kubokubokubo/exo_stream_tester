@@ -1,15 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="net.kubokubo.exoplayer.streamtester">
 
-    <application
-        android:theme="@style/AppTheme">
-        <activity
-            android:name="net.kubokubo.exoplayer.streamtester.MainActivity">
+    <application android:theme="@style/AppTheme">
+        <activity android:name=".WidevinePlayerActivity">
 
         </activity>
-        <activity
-            android:name="net.kubokubo.exoplayer.streamtester.DemoActivity">
-
+        <activity android:name="net.kubokubo.exoplayer.streamtester.DemoActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
