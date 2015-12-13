@@ -60,6 +60,7 @@ public class PlayerImpl implements Player,
     private DashRendererBuilder mDashRendererBuilder;
     private PlayerControl mPlayerControl;
     private Handler mMainHandler;
+    private PlayerCallback mCallback;
 
     private Context mContext;
     private Surface mSurface;
@@ -74,11 +75,12 @@ public class PlayerImpl implements Player,
         void cancel();
     }
 
-    public PlayerImpl(SurfaceView surfaceView, Context context) {
+    public PlayerImpl(SurfaceView surfaceView, Context context, PlayerCallback playerCallback) {
         mMainHandler = new Handler();
         mSurfaceView = surfaceView;
         mContext = context;
         mExoPlayer = ExoPlayer.Factory.newInstance(RENDERERS_COUNT);
+        mCallback = playerCallback;
     }
 
     private void pushSurface(boolean blockForSurfacePush) {
@@ -232,8 +234,8 @@ public class PlayerImpl implements Player,
     }
 
     @Override
-    public void onVideoSizeChanged(int i, int i1, int i2, float v) {
-
+    public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees, float pixelWidthHeightRatio) {
+        mCallback.onVideoSizeChanged(width, height, unappliedRotationDegrees, pixelWidthHeightRatio);
     }
 
     @Override
@@ -296,7 +298,6 @@ public class PlayerImpl implements Player,
     public void onDownstreamFormatChanged(int i, Format format, int i1, long l) {
 
     }
-
 
     //- Internal classes ---------------------------------------------------------------------------
 

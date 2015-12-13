@@ -3,24 +3,26 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <SurfaceView
-        android:id="@+id/surface_video"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-    <TextView
+    <com.google.android.exoplayer.AspectRatioFrameLayout
+        android:id="@+id/video_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:textColor="#000"
-        android:text="HELLO WORLD"/>
+        android:layout_gravity="center">
+
+        <SurfaceView
+            android:id="@+id/surface_video"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </com.google.android.exoplayer.AspectRatioFrameLayout>
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="30dp"
-        android:textSize="24dp"
         android:background="#eee"
+        android:hint="stream url"
         android:textColor="#000"
         android:textColorHint="#888"
-        android:hint="stream url" />
+        android:textSize="24dp" />
 
 </FrameLayout>
