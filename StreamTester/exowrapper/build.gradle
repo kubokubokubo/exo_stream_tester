@@ -1,5 +1,8 @@
 apply plugin: 'com.android.library'
 
+import org.ajoberstar.grgit.*
+import org.ajoberstar.grgit.operation.*
+
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
@@ -16,10 +19,34 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    ext {
+        exoPlayerVersionHash = "c9caaad50c4148a8c369816c100c170436a3d4d6" // 1.5.3
+    }
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:23.1.1'
-    compile 'com.google.android.exoplayer:exoplayer:r1.5.3'
+//    compile 'com.google.android.exoplayer:exoplayer:r1.5.3'
+    compile project(':ExoPlayer:library')
+    compile project(':ExoPlayer:demo')
 }
+
+task checkoutExoPlayerByTag << {
+    def exoPlayerRepo;
+    File f = new File("./ExoPlayer");
+    if(f.exists()) {
+        exoPlayerRepo = Grgit.open(dir: './ExoPlayer')
+    } else {
+        exoPlayerRepo = Grgit.clone(dir: './ExoPlayer', uri: 'https://github.com/google/ExoPlayer.git')
+    }
+    exoPlayerRepo.reset(commit: 'HEAD', mode: ResetOp.Mode.HARD)
+    exoPlayerRepo.checkout(branch: 'master')
+    exoPlayerRepo.branch.remove(names: ['exowrapper-build'], force: true)
+    logger.quiet("checking out exoplayer hash " + android.exoPlayerVersionHash)
+    exoPlayerRepo.checkout(branch: 'exowrapper-build', startPoint: android.exoPlayerVersionHash, createBranch: true)
+    File exoPatch = new File("./patch/exoPlayer.patch");
+    exoPlayerRepo.apply(patch: exoPatch)
+}
+
+clean.dependsOn 'checkoutExoPlayerByTag'

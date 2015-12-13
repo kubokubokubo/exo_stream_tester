@@ -1,0 +1,65 @@
+From 82b2e189cb8d560d493d796e9e463079a7317791 Mon Sep 17 00:00:00 2001
+From: Jakub Ludma <jakub@zattoo.com>
+Date: Sun, 13 Dec 2015 17:26:40 +0100
+Subject: [PATCH] patch
+
+---
+ demo/build.gradle |  4 ++--
+ settings.gradle   | 25 -------------------------
+ 2 files changed, 2 insertions(+), 27 deletions(-)
+ delete mode 100644 settings.gradle
+
+diff --git a/demo/build.gradle b/demo/build.gradle
+index ff294ad..2f93fa9 100644
+--- a/demo/build.gradle
++++ b/demo/build.gradle
+@@ -11,7 +11,7 @@
+ // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+-apply plugin: 'com.android.application'
++apply plugin: 'com.android.library'
+ 
+ android {
+     compileSdkVersion 23
+@@ -34,5 +34,5 @@ android {
+ }
+ 
+ dependencies {
+-    compile project(':library')
++    compile project(':ExoPlayer:library')
+ }
+diff --git a/settings.gradle b/settings.gradle
+deleted file mode 100644
+index 8d0d282..0000000
+--- a/settings.gradle
++++ /dev/null
+@@ -1,25 +0,0 @@
+-// Copyright (C) 2014 The Android Open Source Project
+-//
+-// Licensed under the Apache License, Version 2.0 (the "License");
+-// you may not use this file except in compliance with the License.
+-// You may obtain a copy of the License at
+-//
+-//      http://www.apache.org/licenses/LICENSE-2.0
+-//
+-// Unless required by applicable law or agreed to in writing, software
+-// distributed under the License is distributed on an "AS IS" BASIS,
+-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-// See the License for the specific language governing permissions and
+-// limitations under the License.
+-include ':library'
+-include ':demo'
+-include ':demo-misc-vp9-opus-sw'
+-include ':playbacktests'
+-include ':extension-opus'
+-include ':extension-vp9'
+-include ':extension-okhttp'
+-
+-project(':demo-misc-vp9-opus-sw').projectDir = new File(settingsDir, 'demo_misc/vp9_opus_sw')
+-project(':extension-opus').projectDir = new File(settingsDir, 'extensions/opus')
+-project(':extension-vp9').projectDir = new File(settingsDir, 'extensions/vp9')
+-project(':extension-okhttp').projectDir = new File(settingsDir, 'extensions/okhttp')
+-- 
+2.3.2 (Apple Git-55)
+

@@ -7,6 +7,8 @@ import java.util.List;
  */
 public interface Player {
 
+    //TODO release the ExoPlayer
+
     public void init(String streamUrl);
 
     public void init(String streamUrl, String licenseUrl);

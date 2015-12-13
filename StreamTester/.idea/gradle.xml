@@ -9,7 +9,11 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/ExoPlayer" />
+            <option value="$PROJECT_DIR$/ExoPlayer/demo" />
+            <option value="$PROJECT_DIR$/ExoPlayer/library" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/exowrapper" />
           </set>
         </option>
       </GradleProjectSettings>

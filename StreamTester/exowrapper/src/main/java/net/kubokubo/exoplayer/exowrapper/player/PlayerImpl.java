@@ -54,7 +54,7 @@ public class PlayerImpl implements Player,
     private boolean mPlayerNeedsPrepare;
 
     // Member variables
-    private ExoPlayer mExoPlayer;
+    private ExoPlayer mExoPlayer; //FIXME release once done
     private DashRendererBuilder mDashRendererBuilder;
     private Handler mMainHandler;
     private PlayerCallback mCallback;
