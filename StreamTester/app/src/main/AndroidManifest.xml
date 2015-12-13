@@ -6,6 +6,10 @@
         <activity
             android:name="net.kubokubo.exoplayer.streamtester.MainActivity">
 
+        </activity>
+        <activity
+            android:name="net.kubokubo.exoplayer.streamtester.DemoActivity">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
