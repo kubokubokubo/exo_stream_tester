@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceView;
 
-import com.google.android.exoplayer.CodecCounters;
 import com.google.android.exoplayer.DummyTrackRenderer;
 import com.google.android.exoplayer.ExoPlayer;
 import com.google.android.exoplayer.MediaCodecAudioTrackRenderer;
@@ -26,7 +25,6 @@ import com.google.android.exoplayer.dash.DashChunkSource;
 import com.google.android.exoplayer.drm.MediaDrmCallback;
 import com.google.android.exoplayer.drm.StreamingDrmSessionManager;
 import com.google.android.exoplayer.upstream.BandwidthMeter;
-import com.google.android.exoplayer.util.PlayerControl;
 import com.google.android.exoplayer.util.Util;
 
 import java.io.IOException;
@@ -58,16 +56,13 @@ public class PlayerImpl implements Player,
     // Member variables
     private ExoPlayer mExoPlayer;
     private DashRendererBuilder mDashRendererBuilder;
-    private PlayerControl mPlayerControl;
     private Handler mMainHandler;
     private PlayerCallback mCallback;
 
     private Context mContext;
     private Surface mSurface;
     private SurfaceView mSurfaceView;
-    private BandwidthMeter mBandwidthMeter;
     private TrackRenderer mVideoRenderer;
-    private CodecCounters mCodecCounters;
 
     public interface RendererBuilder {
         void buildRenderers(PlayerImpl player);
@@ -168,14 +163,8 @@ public class PlayerImpl implements Player,
         }
         // Complete preparation.
         mVideoRenderer = renderers[TYPE_VIDEO];
-        mCodecCounters = mVideoRenderer instanceof MediaCodecTrackRenderer
-                ? ((MediaCodecTrackRenderer) mVideoRenderer).codecCounters
-                : renderers[TYPE_AUDIO] instanceof MediaCodecTrackRenderer
-                ? ((MediaCodecTrackRenderer) renderers[TYPE_AUDIO]).codecCounters : null;
-        mBandwidthMeter = bandwidthMeter;
         pushSurface(false);
         mExoPlayer.prepare(renderers);
-//        rendererBuildingState = RENDERER_BUILDING_STATE_BUILT;
     }
 
     @Override
