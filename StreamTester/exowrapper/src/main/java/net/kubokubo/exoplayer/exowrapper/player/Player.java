@@ -1,8 +1,5 @@
 package net.kubokubo.exoplayer.exowrapper.player;
 
-import android.content.Context;
-import android.view.SurfaceView;
-
 import java.util.List;
 
 /**
@@ -10,7 +7,9 @@ import java.util.List;
  */
 public interface Player {
 
-    public void init(SurfaceView surfaceView, String streamUrl, String licenseUrl, Context context);
+    public void init(String streamUrl);
+
+    public void init(String streamUrl, String licenseUrl);
 
     public void setBitrate(int bitrate);
 

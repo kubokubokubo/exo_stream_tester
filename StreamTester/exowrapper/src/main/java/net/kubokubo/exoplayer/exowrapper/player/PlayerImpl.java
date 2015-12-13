@@ -45,17 +45,25 @@ public class PlayerImpl implements Player,
         MediaCodecVideoTrackRenderer.EventListener,
         MediaCodecAudioTrackRenderer.EventListener {
 
+    // Constatnts
     private static final String TAG = "PlayerImpl";
     private static final String USER_AGENT_STRING = "PlayerImpl";
     public static final int RENDERERS_COUNT = 2;
     public static final int TYPE_VIDEO = 0;
     public static final int TYPE_AUDIO = 1;
 
+    //State
+    private boolean mPlayerNeedsPrepare;
+
+    // Member variables
     private ExoPlayer mExoPlayer;
     private DashRendererBuilder mDashRendererBuilder;
     private PlayerControl mPlayerControl;
     private Handler mMainHandler;
 
+    private Context mContext;
+    private Surface mSurface;
+    private SurfaceView mSurfaceView;
     private BandwidthMeter mBandwidthMeter;
     private TrackRenderer mVideoRenderer;
     private CodecCounters mCodecCounters;
@@ -66,16 +74,56 @@ public class PlayerImpl implements Player,
         void cancel();
     }
 
-    public PlayerImpl() {
-        this.mMainHandler = getMainHandler();
+    public PlayerImpl(SurfaceView surfaceView, Context context) {
+        mMainHandler = new Handler();
+        mSurfaceView = surfaceView;
+        mContext = context;
         mExoPlayer = ExoPlayer.Factory.newInstance(RENDERERS_COUNT);
+    }
+
+    private void pushSurface(boolean blockForSurfacePush) {
+        if (mVideoRenderer == null) {
+            return;
+        }
+
+        if (blockForSurfacePush) {
+            mExoPlayer.blockingSendMessage(
+                    mVideoRenderer, MediaCodecVideoTrackRenderer.MSG_SET_SURFACE, mSurface);
+        } else {
+            mExoPlayer.sendMessage(
+                    mVideoRenderer, MediaCodecVideoTrackRenderer.MSG_SET_SURFACE, mSurface);
+        }
+    }
+
+    private void preparePlayer(boolean playWhenReady) {
+        if (mPlayerNeedsPrepare) {
+           mExoPlayer.prepare();
+            mPlayerNeedsPrepare = false;
+        }
+        setSurface(mSurfaceView.getHolder().getSurface());
+        mExoPlayer.setPlayWhenReady(playWhenReady);
+        mDashRendererBuilder.buildRenderers(this);
+        Log.d(TAG, "prepared player");
+    }
+
+    public void setSurface(Surface surface) {
+        mSurface = surface;
+        pushSurface(false);
     }
 
     //- Player Interface implementation ------------------------------------------------------------
 
     @Override
-    public void init(SurfaceView surfaceView, String streamUrl, String licenseUrl, Context context) {
-        mDashRendererBuilder = new DashRendererBuilder(context, USER_AGENT_STRING, streamUrl, new WidevineMediaDrmCallback(licenseUrl));
+    public void init(String streamUrl, String licenseUrl) {
+        Log.d(TAG, "init: url " + streamUrl + (TextUtils.isEmpty(licenseUrl) ? " no license url" : ", license: " + licenseUrl));
+        mDashRendererBuilder = new DashRendererBuilder(mContext, USER_AGENT_STRING, streamUrl, new WidevineMediaDrmCallback(licenseUrl));
+        preparePlayer(true);
+        //TODO
+    }
+
+    @Override
+    public void init(String streamUrl) {
+        init(streamUrl, null);
     }
 
     @Override
@@ -109,6 +157,7 @@ public class PlayerImpl implements Player,
 
     @Override
     public void onRenderers(TrackRenderer[] renderers, BandwidthMeter bandwidthMeter) {
+        Log.d(TAG, "onRenderers: " + renderers.length + " renderers");
         for (int i = 0; i < RENDERERS_COUNT; i++) {
             if (renderers[i] == null) {
                 // Convert a null renderer to a dummy renderer.
@@ -122,9 +171,8 @@ public class PlayerImpl implements Player,
                 : renderers[TYPE_AUDIO] instanceof MediaCodecTrackRenderer
                 ? ((MediaCodecTrackRenderer) renderers[TYPE_AUDIO]).codecCounters : null;
         mBandwidthMeter = bandwidthMeter;
-        //TODO
-//        pushSurface(false);
-//        player.prepare(renderers);
+        pushSurface(false);
+        mExoPlayer.prepare(renderers);
 //        rendererBuildingState = RENDERER_BUILDING_STATE_BUILT;
     }
 

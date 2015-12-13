@@ -24,14 +24,14 @@ public class MainActivity extends Activity {
         Log.d(TAG, "onCreate()");
         setContentView(R.layout.main_activity);
         mSurfaceView = (SurfaceView) findViewById(R.id.surface_video);
-        mPlayer = new PlayerImpl();
+        mPlayer = new PlayerImpl(mSurfaceView, this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         String streamUrl = "http://dash.edgesuite.net/envivio/dashpr/clear/Manifest.mpd";
-        mPlayer.init(mSurfaceView, streamUrl, null, this);
+        mPlayer.init(streamUrl);
         mPlayer.play();
     }
 
