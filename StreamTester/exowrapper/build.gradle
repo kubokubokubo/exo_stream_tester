@@ -35,10 +35,7 @@ dependencies {
 task checkoutExoPlayerByTag << {
     def exoPlayerRepo;
     File f = new File("./ExoPlayer");
-    if(f.exists() && f.isDirectory() && f.list() == null) {
-        logger.quiet("cloning ExoPlayer");
-        exoPlayerRepo = Grgit.clone(dir: './ExoPlayer', uri: 'https://github.com/google/ExoPlayer.git')
-    } else {
+    if(f.exists()) {
         exoPlayerRepo = Grgit.open(dir: './ExoPlayer')
     }
     exoPlayerRepo.reset(commit: 'HEAD', mode: ResetOp.Mode.HARD)
